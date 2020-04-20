@@ -4,6 +4,6 @@ public abstract class SimObject {
 
     public abstract void tick(int clock);
 
-    public getCreationTime() { return creationTime; }
+    public int getCreationTime() { return creationTime; }
     public SimObject(int clock) { creationTime = clock; }
 }
