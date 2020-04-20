@@ -5,6 +5,8 @@ public class Arrivals extends SimObject {
     private final double probForward = 0.6;
     private final double probRight = 0.3;
 
+    private int numberCreated;
+
     private int denomMax, denomMin;
     private long denom;
     private final double center = 61200;
@@ -34,6 +36,8 @@ public class Arrivals extends SimObject {
         if (timeUntil < 0) timeUntil = 0;
         if (timeUntil == 0) {
             if (lane.size() < 30) {
+                numberCreated++;
+                // System.out.println("" + clock + ": Adding...");
                 lane.add(new Car(clock, probForward, probRight));
                 newDenom(clock);
                 timeUntil = Math.round(nextDoubleExp());
@@ -45,6 +49,7 @@ public class Arrivals extends SimObject {
 
     public Arrivals(int clock, int maxAvg, int minAvg) {
         super(clock);
+        numberCreated = 0;
         denomMax = maxAvg; denomMin = minAvg;
         newDenom(clock);
         timeUntil = Math.round(nextDoubleExp());

@@ -12,5 +12,7 @@ public class Simulation {
                 System.out.println(clock);
             }
         }
+
+        System.out.println("Average soujourn: " + roadNetwork.getAverageSoujournTime());
     }
 }
