@@ -1,8 +1,8 @@
 import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 
 public class RoadIntersection extends SimObject {
-    private static int trafficInterval = 20;
+    private final int ROAD_SIZE = 50;
 
     public static enum Direction {
         North, South, East, West
@@ -10,7 +10,7 @@ public class RoadIntersection extends SimObject {
 
     private HashMap<Direction, Road> roads;
     private TrafficSignal trafficSignal;
-    private List<Car> intersection;
+    private ArrayList<Car> intersection;
 
     protected void passRoadRef(Road ref) { roads.put(Direction.East, ref); }
 
@@ -19,7 +19,7 @@ public class RoadIntersection extends SimObject {
     }
 
     public void tick(int clock) {
-        List<Car> toRemove;
+        ArrayList<Car> toRemove = new ArrayList<Car>();
 
         for (Car car : intersection) {
             car.tick(clock);
@@ -165,13 +165,15 @@ public class RoadIntersection extends SimObject {
             break;
         }
     }
-    public RoadIntersection(int clock) {
+    public RoadIntersection(int clock, int trafficInterval) {
         super(clock);
 
-        roads.put(Direction.North, new Road(ROAD_SIZE, Direction.North));
-        roads.put(Direction.South, new Road(ROAD_SIZE, Direction.South));
-        roads(Direction.East, new Road(ROAD_SIZE, Direction.East));
-        roads(Direction.West, new Road(ROAD_SIZE, Direction.West));
+        intersection = new ArrayList<Car>();
+        roads = new HashMap<Direction, Road>();
+        roads.put(Direction.North, new Road(clock, ROAD_SIZE));
+        roads.put(Direction.South, new Road(clock, ROAD_SIZE));
+        roads.put(Direction.East, new Road(clock, ROAD_SIZE));
+        roads.put(Direction.West, new Road(clock, ROAD_SIZE));
 
         trafficSignal = new TrafficSignal(clock, trafficInterval);
     }

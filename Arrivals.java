@@ -1,11 +1,14 @@
 import java.util.Random;
 
 public class Arrivals extends SimObject {
+    private final double probForward = 0.6;
+    private final double probRight = 0.3;
+
     private int denomMax, denomMin;
-    private int denom;
+    private long denom;
     private final double center = 61200;
     private final double sd = 3200;
-    private int timeUntil;
+    private long timeUntil;
 
     private double pdfNorm(int clock) {
         return (Math.pow(Math.E, -0.5*Math.pow((clock - center)/sd, 2)));
@@ -17,12 +20,13 @@ public class Arrivals extends SimObject {
     }
 
     private void newDenom(int clock) {
-        denom = denomMax - (denomMax - denomMin)*pdfNorm(clock);
+        denom = Math.round(denomMax - (denomMax - denomMin)*pdfNorm(clock));
     }
 
-    public void tick(int clock, Road road) {
+    public void tick(int clock, Queue<Car> lane) {
+        System.out.println(timeUntil);
         if (timeUntil == 0) {
-            Car newCar = new Car(clock);
+            lane.add(new Car(clock, probForward, probRight));
             newDenom(clock);
             timeUntil = Math.round(nextDoubleExp());
         } else {
