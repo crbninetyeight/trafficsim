@@ -8,8 +8,8 @@ public class RoadNet {
     }
 
     public RoadNet(int clock) {
-        intersectionA = new RoadIntersection(clock);
-        intersectionB = new RoadIntersection(clock);
+        intersectionA = new RoadIntersection(clock, 80);
+        intersectionB = new RoadIntersection(clock, 120);
 
         intersectionA.join(intersectionB);
     }

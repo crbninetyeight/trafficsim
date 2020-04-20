@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class RoadIntersection extends SimObject {
     private final int ROAD_SIZE = 50;
@@ -11,6 +12,13 @@ public class RoadIntersection extends SimObject {
     private HashMap<Direction, Road> roads;
     private TrafficSignal trafficSignal;
     private ArrayList<Car> intersection;
+
+    private double nextDoubleExp(double average) {
+        Random r = new Random();
+        double randomSample = r.nextDouble();
+        double a = (1.0 - randomSample);
+        return (-1.0) * Math.log(a) / (average);
+    }
 
     protected void passRoadRef(Road ref) { roads.put(Direction.East, ref); }
 
@@ -24,17 +32,15 @@ public class RoadIntersection extends SimObject {
         for (Car car : intersection) {
             car.tick(clock);
             if (car.getCountdown() == 0) {
-                Car.Movement movement = car.getMovement();
-
                 car.resetMovement();
 
                 switch (car.isGoing()) {
                     case North:
-                    roads.get(Direction.South).appendA(car);
+                    roads.get(Direction.South).appendB(car);
                     break;
 
                     case South:
-                    roads.get(Direction.North).appendB(car);
+                    roads.get(Direction.North).appendA(car);
                     break;
 
                     case East:
@@ -54,52 +60,119 @@ public class RoadIntersection extends SimObject {
             intersection.remove(car);
         }
 
+        toRemove.clear();
         trafficSignal.tick(clock);
 
         for (RoadIntersection.Direction dir : roads.keySet()) {
             Road road = roads.get(dir);
             road.tick(clock, intersection);
-            if (road.hasCarInA()) {
-                Car car;
 
-                if (dir == Direction.North || dir == Direction.East) {
+            Car car = null;
+
+            if (dir == Direction.North || dir == Direction.East) {
+                if (road.hasCarInA()) {
                     car = road.getFromA();
-                } else {
-                    car = road.getFromB(); 
                 }
+            } else {
+                if (road.hasCarInB()) {
+                    car = road.getFromB();
+                }
+            }
+
+            if (car != null) {
+                boolean moveSuccess = false;
 
                 car.setFrom(dir);
                 setCarDirection(car);
-                
+
                 if (car.getMovement() != Car.Movement.Right) {
                     if (car.isFrom() == Direction.North || car.isFrom() == Direction.South) {
                         if (trafficSignal.NorthSouth()) {
                             boolean isMatched = false;
                             for (Car ref : intersection) {
-                                isMatched = car.isGoing() == ref.isGoing();
+                                isMatched = !isLegalMove(car, ref);
                                 if (isMatched) break;
                             }
 
                             if (!isMatched) {
                                 intersection.add(car);
-                                road.removeTopA();
+                                moveSuccess = true;
+                                // road.removeTopA();
                             }
                         }
                     }
                 } else {
                     boolean isMatched = false;
                     for (Car ref : intersection) {
-                        isMatched = car.isGoing() == ref.isGoing();
+                        isMatched = !isLegalMove(car, ref);
                         if (isMatched) break;
                     }
 
                     if (!isMatched) {
+                        car.setCountdown(Math.round(nextDoubleExp(0.5)));
                         intersection.add(car);
-                        road.removeTopA();
+                        moveSuccess = true;
+                        // road.removeTopA();
                     }
                 }
+
+                if (moveSuccess) {
+                    if (dir == Direction.North || dir == Direction.East) {
+                        road.removeTopA();
+                    } else road.removeTopB();
+                }
             }
+
+
+            // if (road.hasCarInA()) {
+            //     Car car;
+
+            //     if (dir == Direction.North || dir == Direction.East) {
+            //         car = road.getFromA();
+            //     } else {
+            //         car = road.getFromB(); 
+            //     }
+
+            //     car.setFrom(dir);
+            //     setCarDirection(car);
+            //     
+            //     if (car.getMovement() != Car.Movement.Right) {
+            //         if (car.isFrom() == Direction.North || car.isFrom() == Direction.South) {
+            //             if (trafficSignal.NorthSouth()) {
+            //                 boolean isMatched = false;
+            //                 for (Car ref : intersection) {
+            //                     isMatched = car.isGoing() == ref.isGoing();
+            //                     if (isMatched) break;
+            //                 }
+
+            //                 if (!isMatched) {
+            //                     intersection.add(car);
+            //                     road.removeTopA();
+            //                 }
+            //             }
+            //         }
+            //     } else {
+            //         boolean isMatched = false;
+            //         for (Car ref : intersection) {
+            //             isMatched = car.isGoing() == ref.isGoing();
+            //             if (isMatched) break;
+            //         }
+
+            //         if (!isMatched) {
+            //             intersection.add(car);
+            //             road.removeTopA();
+            //         }
+            //     }
+            // }
         }
+    }
+
+    public boolean isLegalMove(Car car, Car ref) {
+        Direction cdir = car.isGoing();
+        Direction rdir = ref.isGoing();
+
+        // TODO: make collision detection more comprehensive
+        return cdir != rdir;
     }
 
     public void setCarDirection(Car car) {
@@ -174,6 +247,11 @@ public class RoadIntersection extends SimObject {
         roads.put(Direction.South, new Road(clock, ROAD_SIZE));
         roads.put(Direction.East, new Road(clock, ROAD_SIZE));
         roads.put(Direction.West, new Road(clock, ROAD_SIZE));
+
+        roads.get(Direction.North).assignArrival(new Arrivals(clock, 120, 80), 0);
+        roads.get(Direction.South).assignArrival(new Arrivals(clock, 120, 80), 1);
+        roads.get(Direction.East).assignArrival(new Arrivals(clock, 120, 30), 0);
+        roads.get(Direction.North).assignArrival(new Arrivals(clock, 120, 90), 1);
 
         trafficSignal = new TrafficSignal(clock, trafficInterval);
     }

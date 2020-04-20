@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class Car extends SimObject {
-    private int countdown;
+    private long countdown;
 
     private double probForward, probRight;
 
@@ -36,10 +36,12 @@ public class Car extends SimObject {
     public RoadIntersection.Direction isGoing() { return directionGoing; }
     public void setGoing(RoadIntersection.Direction going) { directionGoing = going; }
 
-    public int getCountdown() { return countdown; }
-    public void setCountdown(int count) { countdown = count; }
+    public long getCountdown() { return countdown; }
+    public void setCountdown(long count) { countdown = count; }
 
-    public void tick(int clock) {}
+    public void tick(int clock) {
+        if (countdown >= 0) countdown--; else countdown = 0;
+    }
 
     public Car(int clock, double probForward, double probRight) {
         super(clock);
