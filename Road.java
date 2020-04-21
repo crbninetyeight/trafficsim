@@ -56,6 +56,7 @@ public class Road extends SimObject {
         }
     }
 
+    public Arrivals getArrival() { return arrival; }
     public Terminals getTerminal() { return terminal; }
 
     public Road(int clock, int sizeLimit) {

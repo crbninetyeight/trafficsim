@@ -8,10 +8,30 @@ public class RoadNet {
         intersectionB.tick(clock);
     }
 
+    public int getTotalCreated() {
+        ArrayList<Arrivals> allArrivals = getAllArrivals();
+        int totalCreations = 0;
+
+        for (Arrivals arr : allArrivals) {
+            totalCreations += arr.getTotalCreated();
+        }
+
+        return totalCreations;
+    }
+
+    public int getTotalTerminated() {
+        ArrayList<Terminals> allTerms = getAllTerminals();
+        int totalTerminations = 0;
+
+        for (Terminals term : allTerms) {
+            totalTerminations += term.getTotalTerminated();
+        }
+
+        return totalTerminations;
+    }
+
     public double getAverageSoujournTime() {
         ArrayList<Terminals> allTerms = getAllTerminals();
-
-        System.out.println(allTerms);
 
         int totalSoujourn = 0;
         int totalTerminations = 0;
@@ -21,6 +41,15 @@ public class RoadNet {
         }
 
         return totalSoujourn / totalTerminations;
+    }
+
+    public ArrayList<Arrivals> getAllArrivals() {
+        ArrayList<Arrivals> ret = new ArrayList<Arrivals>();
+
+        ret.addAll(intersectionA.getAllArrivals());
+        ret.addAll(intersectionB.getAllArrivals());
+
+        return ret;
     }
 
     public ArrayList<Terminals> getAllTerminals() {

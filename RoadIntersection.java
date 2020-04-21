@@ -284,6 +284,17 @@ public class RoadIntersection extends SimObject {
         }
     }
 
+    public ArrayList<Arrivals> getAllArrivals() {
+        ArrayList<Arrivals> ret = new ArrayList<Arrivals>();
+
+        for (Direction key : roads.keySet()) {
+            Road road = roads.get(key);
+            if (road.getArrival() != null) ret.add(road.getArrival());
+        }
+
+        return ret;
+    }
+
     public ArrayList<Terminals> getAllTerminals() {
         ArrayList<Terminals> ret = new ArrayList<Terminals>();
 

@@ -17,6 +17,8 @@ public class Arrivals extends SimObject {
         return (Math.pow(Math.E, -0.5*Math.pow((clock - center)/sd, 2)));
     }
 
+    public int getTotalCreated() { return numberCreated; }
+
     private double nextDoubleExp() {
         Random r = new Random();
         double randomSample = r.nextDouble();
