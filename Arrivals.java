@@ -52,7 +52,7 @@ public class Arrivals extends SimObject {
         if (timeUntil < 0) timeUntil = 0;
         // if inter-arrival period has elapsed, create a new car
         if (timeUntil == 0) {
-            if (lane.size() < 30) {
+            if (lane.size() < 50) {
                 numberCreated++;
                 // System.out.println("" + clock + ": Adding...");
                 lane.add(new Car(clock, probForward, probRight));

@@ -172,6 +172,10 @@ public class RoadIntersection extends SimObject {
                     } else {
                         // System.out.println("Couldn't make a move.");
                     }
+
+                    if (isLaneFull) {
+                        System.out.println(clock + ": Couldn't make a move.");
+                    }
                 }
 
                 if (moveSuccess) {
@@ -230,17 +234,18 @@ public class RoadIntersection extends SimObject {
         for (Direction key : roads.keySet()) {
             thing.add(roads.get(key).totalCurrentSize());
 
-            if (clock % 4000 == 0) {
+            if (clock % 100 == 0) {
                 System.out.print(key + ", ");
             }
         }
 
-        if (clock % 4000 == 0) {
+        if (clock % 100 == 0) {
             System.out.println();
         }
 
-        if (clock % 4000 == 0) {
+        if (clock % 100 == 0) {
             System.out.println("" + clock + ": " + thing);
+            System.out.println(intersection.size());
         }
     }
 
@@ -338,7 +343,7 @@ public class RoadIntersection extends SimObject {
             }
         }
         
-        System.out.println(String.format("%s,%s,%s,%s,%s,%s,%b", cdir, cmov, cfrom, rdir, rmov, rfrom, retVal));
+        //System.out.println(String.format("%s,%s,%s,%s,%s,%s,%b", cdir, cmov, cfrom, rdir, rmov, rfrom, retVal));
         
         return retVal;
         //return cdir != rdir;

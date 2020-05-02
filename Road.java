@@ -23,8 +23,8 @@ public class Road extends SimObject {
     public boolean hasCarInA() { return !laneA.isEmpty(); }
     public boolean hasCarInB() { return !laneB.isEmpty(); }
 
-    public boolean isLaneFullA() { return laneA.size() == laneLimit; }
-    public boolean isLaneFullB() { return laneB.size() == laneLimit; }
+    public boolean isLaneFullA() { return laneA.size() >= laneLimit; }
+    public boolean isLaneFullB() { return laneB.size() >= laneLimit; }
 
     public void appendA(Car car) { laneA.add(car); }
     public void appendB(Car car) { laneB.add(car); }
@@ -65,6 +65,10 @@ public class Road extends SimObject {
 
         if (terminal != null) {
             terminal.tick(clock);
+        }
+
+        if (clock % 100 == 0) {
+            System.out.println(clock + ": " + laneA.size() + ", " + laneB.size());
         }
     }
 
