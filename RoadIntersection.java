@@ -330,7 +330,7 @@ public class RoadIntersection extends SimObject {
                 case Left:
                     if(isOpposite(car,ref) && rmov == Car.Movement.Forward){
                         retVal = false;
-                    }else if(isPerpendicular(car, ref) && rmov == Car.Movement.Forward ){
+                    }else if(isPerpendicular(car, ref) && (rmov == Car.Movement.Forward || rmov == Car.Movement.Left)){
                         retVal = false;
                     }
                     else{
@@ -343,10 +343,7 @@ public class RoadIntersection extends SimObject {
             }
         }
         
-        //System.out.println(String.format("%s,%s,%s,%s,%s,%s,%b", cdir, cmov, cfrom, rdir, rmov, rfrom, retVal));
-        
         return retVal;
-        //return cdir != rdir;
     }
 
     // indicate where the car is heading as a global cardinal direction
