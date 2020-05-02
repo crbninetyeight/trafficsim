@@ -1,8 +1,19 @@
+
+/* CS4632 - Modeling and Simulation
+ * Section 01
+ * Final Project
+ * March 02, 2020
+ * Christian Byrne and Patrick Sweeney
+ */
+
 import java.util.Random;
 
+// Car - an object which simulates a car
 public class Car extends SimObject {
+    // amount of time left in an intersection
     private long countdown;
 
+    // probability of going forward, right
     private double probForward, probRight;
 
     public static enum Movement {
@@ -15,6 +26,7 @@ public class Car extends SimObject {
 
     public Movement getMovement() { return movement; }
 
+    // decide where car is moving next
     public void resetMovement() {
         Random r = new Random();
         double randomSample = r.nextDouble();

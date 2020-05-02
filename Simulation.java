@@ -1,4 +1,12 @@
 
+/* CS4632 - Modeling and Simulation
+ * Section 01
+ * Final Project
+ * March 02, 2020
+ * Christian Byrne and Patrick Sweeney
+ */
+
+// Simulation - the parent object of the entire simulation being modeled
 public class Simulation {
     public static void main(String args[]) {
         int clock = 0;

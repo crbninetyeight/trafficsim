@@ -1,15 +1,25 @@
+
+/* CS4632 - Modeling and Simulation
+ * Section 01
+ * Final Project
+ * March 02, 2020
+ * Christian Byrne and Patrick Sweeney
+ */
+
 import java.util.Random;
 import java.util.Queue;
 
+// Terminals - the terminating points in the simulation
 public class Terminals extends SimObject {
     Queue<Car> lane;
-    private double avg;
+    private double avg; // the average soujourn time
 
-    private int totalTerminated;
-    private long totalSoujourn;
+    private int totalTerminated; // number of cars terminated at this terminal
+    private long totalSoujourn;  // total sum of soujourn time
 
-    private long timeUntilNextTerm;
+    private long timeUntilNextTerm; // random variable determining time until next termination
 
+    // outputs a random double with exponential distribution
     private double nextDoubleExp() {
         Random r = new Random();
         double randomSample = r.nextDouble();
@@ -25,8 +35,10 @@ public class Terminals extends SimObject {
     public long getTotalSoujourn() { return totalSoujourn; }
     public int getTotalTerminated() { return totalTerminated; }
 
+    // perform a step of simulation
     public void tick(int clock) {
         if (!lane.isEmpty()) {
+            // determine if it time until next termination has elapsed
             if (timeUntilNextTerm == 0) {
                 // System.out.println("" + clock + ": Removing...");
                 Car car = lane.poll();

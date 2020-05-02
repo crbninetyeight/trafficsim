@@ -1,13 +1,25 @@
+
+/* CS4632 - Modeling and Simulation
+ * Section 01
+ * Final Project
+ * March 02, 2020
+ * Christian Byrne and Patrick Sweeney
+ */
+
 import java.util.ArrayList;
 
+
+// RoadNet - a road network consisting of two inter-connected intersections
 public class RoadNet {
     private RoadIntersection intersectionA, intersectionB;
 
     public void tick(int clock) {
+        // update the state of intersections A and B
         intersectionA.tick(clock);
         intersectionB.tick(clock);
     }
 
+    // sum all creation counts recorded by the Arrivals objects into a single variable
     public int getTotalCreated() {
         ArrayList<Arrivals> allArrivals = getAllArrivals();
         int totalCreations = 0;
@@ -19,6 +31,7 @@ public class RoadNet {
         return totalCreations;
     }
 
+    // sum all termination counts recorded by the Terminals objects into a single variable
     public int getTotalTerminated() {
         ArrayList<Terminals> allTerms = getAllTerminals();
         int totalTerminations = 0;
@@ -30,6 +43,7 @@ public class RoadNet {
         return totalTerminations;
     }
 
+    // calculate the average soujourn time of the cars in the simulation
     public double getAverageSoujournTime() {
         ArrayList<Terminals> allTerms = getAllTerminals();
 
@@ -43,6 +57,7 @@ public class RoadNet {
         return totalSoujourn / totalTerminations;
     }
 
+    // get an array of all Arrivals objects in the road network
     public ArrayList<Arrivals> getAllArrivals() {
         ArrayList<Arrivals> ret = new ArrayList<Arrivals>();
 
@@ -52,6 +67,7 @@ public class RoadNet {
         return ret;
     }
 
+    // get an array of all Terminals objects in the road network
     public ArrayList<Terminals> getAllTerminals() {
         ArrayList<Terminals> ret = new ArrayList<Terminals>();
 
