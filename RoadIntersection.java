@@ -211,13 +211,104 @@ public class RoadIntersection extends SimObject {
 
         // System.out.println("" + clock + ": " + thing);
     }
-
+    public boolean isOpposite(Car car, Car ref){
+        Direction cfrom = car.isFrom();
+        Direction rfrom = ref.isFrom();
+        
+        boolean retVal = false;
+        switch(cfrom){
+            case North:
+                if(rfrom == Direction.South){
+                    retVal = true;
+                }
+                break;
+            case South:
+                if(rfrom == Direction.North){
+                    retVal = true;
+                }
+                break;
+            case East:
+                if(rfrom == Direction.West){
+                    retVal = true;
+                }
+                break;
+            case West:
+                if(rfrom == Direction.East){
+                    retVal = true;
+                }
+                break;
+        }
+        return retVal;
+    }
+    
+    public boolean isPerpendicular(Car car, Car ref){
+        Direction cfrom = car.isFrom();
+        Direction rfrom = ref.isFrom();
+        
+        boolean retVal = false;
+        switch(cfrom){
+            case North:
+            case South:
+                if(rfrom ==Direction.East || rfrom == Direction.West){
+                    retVal = true;
+                }
+                break;
+            case East:
+            case West:
+                if(rfrom == Direction.North || rfrom == Direction.South){
+                    retVal = true;
+                }
+                break;
+        }
+        return retVal;
+    }
+    
+    
+    
     public boolean isLegalMove(Car car, Car ref) {
         Direction cdir = car.isGoing();
         Direction rdir = ref.isGoing();
-
+        
+        Direction cfrom = car.isFrom();
+        Direction rfrom = ref.isFrom();
+        
+        Car.Movement cmov = car.getMovement();
+        Car.Movement rmov = ref.getMovement();
+        
+        boolean retVal = false;
+        
+        if(cdir != rdir){
+            switch(cmov){
+                case Forward:
+                    if(isOpposite(car,ref) && rmov == Car.Movement.Left){
+                        retVal = false;
+                    }else if(isPerpendicular(car,ref) && (rmov == Car.Movement.Forward || rmov == Car.Movement.Left)){
+                        retVal = false;
+                    }else{
+                        retVal = true;
+                    }
+                    break;
+                case Left:
+                    if(isOpposite(car,ref) && rmov == Car.Movement.Forward){
+                        retVal = false;
+                    }else if(isPerpendicular(car, ref) && rmov == Car.Movement.Forward ){
+                        retVal = false;
+                    }
+                    else{
+                        retVal = true;
+                    }
+                    break;
+                default:
+                    retVal = true;
+                    break;
+            }
+        }
+        
+        System.out.println(String.format("%s,%s,%s,%s,%s,%s,%b", cdir, cmov, cfrom, rdir, rmov, rfrom, retVal));
+        
+        return retVal;
         // TODO: make collision detection more comprehensive
-        return cdir != rdir;
+        //return cdir != rdir;
     }
 
     public void setCarDirection(Car car) {
