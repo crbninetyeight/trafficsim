@@ -28,13 +28,13 @@ public class RoadIntersection extends SimObject {
         return (-1.0) * Math.log(a) / (average);
     }
 
-    protected void passRoadRef(Road ref) { roads.put(Direction.East, ref); }
+    protected void passRoadRef(Road ref) { roads.put(Direction.West, ref); }
 
     // join with another intersection (to its west)
     public void join(RoadIntersection ref) {
         roads.get(Direction.West).unassignArrival();
         roads.get(Direction.West).unassignTerminal();
-        ref.passRoadRef(roads.get(Direction.West));
+        ref.passRoadRef(roads.get(Direction.East));
     }
 
     public void tick(int clock) {
@@ -48,19 +48,13 @@ public class RoadIntersection extends SimObject {
                 // move car to its intended road
                 switch (car.isGoing()) {
                     case North:
-                    roads.get(Direction.South).appendB(car);
+                    case East:
+                    roads.get(car.isGoing()).appendB(car);
                     break;
 
                     case South:
-                    roads.get(Direction.North).appendA(car);
-                    break;
-
-                    case East:
-                    roads.get(Direction.West).appendB(car);
-                    break;
-
                     case West:
-                    roads.get(Direction.South).appendA(car);
+                    roads.get(Direction.North).appendA(car);
                     break;
                 }
 
@@ -115,6 +109,7 @@ public class RoadIntersection extends SimObject {
 
                             boolean isLaneFull = true;
 
+                            // if car is going north or east, check lane B, else check lane A
                             if (car.isGoing() == Direction.North || car.isGoing() == Direction.East) {
                                 isLaneFull = roads.get(car.isGoing()).isLaneFullB();
                             } else isLaneFull = roads.get(car.isGoing()).isLaneFullA();
@@ -174,7 +169,7 @@ public class RoadIntersection extends SimObject {
                     }
 
                     if (isLaneFull) {
-                        System.out.println(clock + ": Couldn't make a move.");
+                        // System.out.println(clock + ": Couldn't make a move.");
                     }
                 }
 
@@ -446,16 +441,16 @@ public class RoadIntersection extends SimObject {
         roads.put(Direction.West, new Road(clock, ROAD_SIZE));
 
         // create an Arrivals object for every road, with max arrival interval of 10 and minimum of 3
-        roads.get(Direction.North).assignArrival(new Arrivals(clock, 10, 9), 0);
-        roads.get(Direction.South).assignArrival(new Arrivals(clock, 10, 9), 1);
-        roads.get(Direction.East).assignArrival(new Arrivals(clock, 10, 3), 0);
-        roads.get(Direction.North).assignArrival(new Arrivals(clock, 10, 9), 1);
+        roads.get(Direction.North).assignArrival(new Arrivals(clock, 20, 19), 0);
+        roads.get(Direction.South).assignArrival(new Arrivals(clock, 20, 19), 1);
+        roads.get(Direction.East).assignArrival(new Arrivals(clock, 20, 10), 0);
+        roads.get(Direction.West).assignArrival(new Arrivals(clock, 20, 18), 1);
 
         // create a Terminals object for every road, with an average terminal period of 5
-        roads.get(Direction.North).assignTerminal(clock, 1.0/5, 1);
-        roads.get(Direction.South).assignTerminal(clock, 1.0/5, 0);
-        roads.get(Direction.East).assignTerminal(clock, 1.0/5, 1);
-        roads.get(Direction.West).assignTerminal(clock, 1.0/5, 0);
+        roads.get(Direction.North).assignTerminal(clock, 2.0/5, 1);
+        roads.get(Direction.South).assignTerminal(clock, 2.0/5, 0);
+        roads.get(Direction.East).assignTerminal(clock, 2.0/5, 1);
+        roads.get(Direction.West).assignTerminal(clock, 2.0/5, 0);
 
         trafficSignal = new TrafficSignal(clock, trafficInterval);
     }

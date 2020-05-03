@@ -23,6 +23,12 @@ public class Simulation {
 
         System.out.println("Total number of cars created: " + roadNetwork.getTotalCreated());
         System.out.println("Total number of cars soujourned: " + roadNetwork.getTotalTerminated());
-        System.out.println("Average soujourn time: " + roadNetwork.getAverageSoujournTime());
+        System.out.println("Average soujourn time (s): " + roadNetwork.getAverageSoujournTime());
+
+        System.out.println();
+
+        System.out.println("Total number of cars created (during rush-hour): " + roadNetwork.getTotalCreatedRH());
+        System.out.println("Total number of cars soujourned (during rush-hour): " + roadNetwork.getTotalTerminatedRH());
+        System.out.println("Average soujourn time (during rush-hour) (s): " + roadNetwork.getAverageSoujournTimeRH());
     }
 }

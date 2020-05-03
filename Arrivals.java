@@ -16,6 +16,7 @@ public class Arrivals extends SimObject {
 
     // number of cars created
     private int numberCreated;
+    private int numberCreatedRH; // during rush-hour
 
     // denominations of the exponential function (changes over time)
     private int denomMax, denomMin;
@@ -30,6 +31,7 @@ public class Arrivals extends SimObject {
     }
 
     public int getTotalCreated() { return numberCreated; }
+    public int getTotalCreatedRH() { return numberCreatedRH; }
 
     // return a random variable of exponential distribution
     private double nextDoubleExp() {
@@ -53,6 +55,11 @@ public class Arrivals extends SimObject {
         // if inter-arrival period has elapsed, create a new car
         if (timeUntil == 0) {
             if (lane.size() < 50) {
+                if (clock > 57000 && clock < 64000) {
+                    // increase number created during rush-hour traffic
+                    numberCreatedRH++;
+                }
+
                 numberCreated++;
                 // System.out.println("" + clock + ": Adding...");
                 lane.add(new Car(clock, probForward, probRight));

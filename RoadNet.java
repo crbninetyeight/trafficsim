@@ -31,6 +31,18 @@ public class RoadNet {
         return totalCreations;
     }
 
+    // sum all creation counts recorded by the Arrivals objects into a single variable
+    public int getTotalCreatedRH() {
+        ArrayList<Arrivals> allArrivals = getAllArrivals();
+        int totalCreations = 0;
+
+        for (Arrivals arr : allArrivals) {
+            totalCreations += arr.getTotalCreatedRH();
+        }
+
+        return totalCreations;
+    }
+
     // sum all termination counts recorded by the Terminals objects into a single variable
     public int getTotalTerminated() {
         ArrayList<Terminals> allTerms = getAllTerminals();
@@ -38,6 +50,18 @@ public class RoadNet {
 
         for (Terminals term : allTerms) {
             totalTerminations += term.getTotalTerminated();
+        }
+
+        return totalTerminations;
+    }
+
+    // sum all termination counts recorded by the Terminals objects into a single variable
+    public int getTotalTerminatedRH() {
+        ArrayList<Terminals> allTerms = getAllTerminals();
+        int totalTerminations = 0;
+
+        for (Terminals term : allTerms) {
+            totalTerminations += term.getTotalTerminatedRH();
         }
 
         return totalTerminations;
@@ -52,6 +76,20 @@ public class RoadNet {
         for (Terminals term : allTerms) {
             totalSoujourn += term.getTotalSoujourn();
             totalTerminations += term.getTotalTerminated();
+        }
+
+        return totalSoujourn / totalTerminations;
+    }
+
+    // calculate the average soujourn time of the cars in the simulation
+    public double getAverageSoujournTimeRH() {
+        ArrayList<Terminals> allTerms = getAllTerminals();
+
+        int totalSoujourn = 0;
+        int totalTerminations = 0;
+        for (Terminals term : allTerms) {
+            totalSoujourn += term.getTotalSoujournRH();
+            totalTerminations += term.getTotalTerminatedRH();
         }
 
         return totalSoujourn / totalTerminations;
