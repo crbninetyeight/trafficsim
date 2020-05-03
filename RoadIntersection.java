@@ -229,19 +229,19 @@ public class RoadIntersection extends SimObject {
         for (Direction key : roads.keySet()) {
             thing.add(roads.get(key).totalCurrentSize());
 
-            if (clock % 100 == 0) {
-                System.out.print(key + ", ");
-            }
+            // if (clock % 100 == 0) {
+            //     System.out.print(key + ", ");
+            // }
         }
 
-        if (clock % 100 == 0) {
-            System.out.println();
-        }
+        // if (clock % 100 == 0) {
+        //     System.out.println();
+        // }
 
-        if (clock % 100 == 0) {
-            System.out.println("" + clock + ": " + thing);
-            System.out.println(intersection.size());
-        }
+        // if (clock % 100 == 0) {
+        //     System.out.println("" + clock + ": " + thing);
+        //     System.out.println(intersection.size());
+        // }
     }
 
     // determine if two cars are heading in opposing directions

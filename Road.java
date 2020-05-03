@@ -67,9 +67,9 @@ public class Road extends SimObject {
             terminal.tick(clock);
         }
 
-        if (laneA.size() > 50 || laneB.size() > 50) {
-            System.out.println(clock + ": " + laneA.size() + ", " + laneB.size());
-        }
+        // if (laneA.size() > 50 || laneB.size() > 50) {
+        //     System.out.println(clock + ": " + laneA.size() + ", " + laneB.size());
+        // }
     }
 
     public Arrivals getArrival() { return arrival; }
